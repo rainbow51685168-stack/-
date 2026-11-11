@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+ 
+  <meta charset="UTF-8">
+  <meta name="keywords" content="AI 工具, 圖片生成, 影片生成, 音樂創作, ToolVerse">
+  <meta name="description" content="ToolVerse - 探索精選 AI 工具，依類別瀏覽與搜尋">
+  <meta name="author" content="ToolVerse">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ToolVerse</title>
+
+  <link rel="stylesheet" href="computer.css" media="screen and (min-width:581px)">
+  <link rel="stylesheet" href="smartphone.css" media="screen and (max-width:580px)">
+  
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="logo" id="logoBtn">ToolVerse</div>
+      <ul class="nav-links">
+        <li><a class="nav-link" href="#" id="navHome">首頁</a></li>
+        <li><a class="nav-link" href="#" id="navCategory">分類</a></li>
+        <li><a class="nav-link" href="#" id="navExplore">探索功能</a></li>
+         <li><a class="nav-link" href="#about" id="navAbout">關於</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <div id="listView">
+
+      <div class="hero">
+        <h1 class="hero-title">探索精選 AI 工具</h1>
+        <p class="hero-text">依類別瀏覽，找到最適合你的 AI 工具</p>
+      </div>
+
+      <div class="search-section">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <!-- <input type="text">：HTML 教材第 37 頁
+               【超出範圍】placeholder 屬性：輸入框還沒輸入內容時顯示的提示文字 -->
+          <input type="text" class="search-input" id="searchInput" placeholder="搜尋 AI 工具名稱或功能...">
+          <!-- 【超出範圍】<button> 標籤：一般用途的按鈕。課程只教 <input type="submit"> / <input type="reset">，
+               這些按鈕不是用來送出表單，而是交給 JavaScript 處理點擊，所以使用 <button>。
+               本頁其他的 <button> 都是同樣的原因 -->
+          <!-- 語音、圖片搜尋目前只有介面，點擊會顯示「即將推出」 -->
+          <button class="voice-btn" id="voiceBtn" title="語音搜尋（即將推出）">🎤</button>
+          <button class="image-btn" id="imageBtn" title="圖片搜尋（即將推出）">📷</button>
+          <button class="search-btn" id="searchBtn">搜尋</button>
+        </div>
+
+        <div class="filter-toggle-row">
+          <!-- 【超出範圍】<button>（原因同上） -->
+          <button class="filter-toggle-btn" id="filterToggle">▼ 進階篩選</button>
+        </div>
+      </div>
+
+      <!-- 進階篩選面板：表單元素（HTML 教材第 36–43 頁）
+           預設隱藏（is-hidden），按上方按鈕後由 JavaScript 展開 -->
+      <form class="advanced-filter is-hidden" id="advancedFilter">
+        <!-- <fieldset> / <legend>：HTML 教材第 43 頁 -->
+        <fieldset class="filter-fieldset">
+          <legend class="filter-legend">進階篩選</legend>
+
+          <div class="filter-group">
+            <p class="filter-label">依類別篩選</p>
+            <!-- <select>：HTML 教材第 39 頁 -->
+            <select class="filter-select" id="filterCategory">
+              <option value="all">全部類別</option>
+              <option value="圖片生成">圖片生成</option>
+              <option value="影片生成">影片生成</option>
+              <option value="音樂創作">音樂創作</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <p class="filter-label">價格方案</p>
+            <!-- <input type="checkbox">：HTML 教材第 38 頁 -->
+            <div class="filter-checkboxes">
+              <span class="check-item"><input type="checkbox" class="price-filter" name="price" value="免費" checked> 免費</span>
+              <span class="check-item"><input type="checkbox" class="price-filter" name="price" value="免費試用" checked> 免費試用</span>
+              <span class="check-item"><input type="checkbox" class="price-filter" name="price" value="付費" checked> 付費</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <p class="filter-label">最低評分</p>
+            <!-- <input type="range">：HTML 教材第 41 頁 -->
+            <input type="range" id="ratingFilter" name="rating" min="0" max="5" step="0.1" value="0">
+            <span class="rating-text"><span id="ratingDisplay">0.0</span> 分以上</span>
+          </div>
+
+          <!-- <input type="reset">：HTML 教材第 40 頁，把表單內的欄位改回預設值 -->
+          <input type="reset" class="filter-reset" value="重設篩選">
+        </fieldset>
+      </form>
+
+      <!-- 類別標籤：點擊後只顯示該類別的工具
+           【超出範圍】<button>（原因同上）；value 屬性存放類別名稱，供 JavaScript 讀取 -->
+      <div class="category-tabs" id="categoryTabs">
+        <button class="category-tab category-tab-active" value="all">All</button>
+        <button class="category-tab" value="圖片生成">圖片生成</button>
+        <button class="category-tab" value="影片生成">影片生成</button>
+        <button class="category-tab" value="音樂創作">音樂創作</button>
+      </div>
+
+      <!-- 工具卡片牆：Grid 版面（CSS 教材第 43–45 頁）
+           卡片內容由 main.js 依 tools-data.js 的資料產生 -->
+      <div class="tools-grid" id="toolsGrid"></div>
+
+      <p class="rating-note" id="ratingNote">* 評分為混合來源估計值</p>
+
+      <div class="no-results is-hidden" id="noResults">
+        找不到符合條件的工具，請調整搜尋或篩選條件。
+      </div>
+
+
+      <!-- 原創探索功能：以原有卡片、表格、表單風格延伸 -->
+      <section class="tv-explore" id="explore">
+        <div class="tv-section-head"><h2 class="about-title">ToolVerse 探索實驗室</h2><p class="about-text">從需求出發，找到適合自己的 AI 工具。</p></div>
+        <div class="tv-feature-tabs" id="featureTabs">
+          <button type="button" class="tv-tab tv-active" data-panel="quizPanel">推薦測驗</button>
+          <button type="button" class="tv-tab" data-panel="scenarioPanel">情境指南</button>
+          <button type="button" class="tv-tab" data-panel="comparePanel">工具比較</button>
+          <button type="button" class="tv-tab" data-panel="pricePanel">價格比較</button>
+          <button type="button" class="tv-tab" data-panel="promptPanel">Prompt 範例庫</button>
+          <button type="button" class="tv-tab" data-panel="guidePanel">新手指南</button>
+          <button type="button" class="tv-tab" data-panel="trendPanel">趨勢與授權</button>
+          <button type="button" class="tv-tab" data-panel="galleryPanel">作品展示</button>
+          <button type="button" class="tv-tab" data-panel="wishPanel">許願池</button>
+        </div>
+        <div class="tv-panel" id="quizPanel">
+          <h3>AI 工具推薦測驗</h3><p class="tv-muted">回答三個問題，根據類別、價格與使用門檻產生建議。</p>
+          <form id="quizForm" class="tv-form">
+            <label>主要用途<select id="quizUse"><option value="圖片生成">圖片生成</option><option value="影片生成">影片製作</option><option value="音樂創作">音樂／聲音</option></select></label>
+            <label>預算<select id="quizBudget"><option value="free">希望免費</option><option value="low">每月 US$10 以內</option><option value="any">可以付費</option></select></label>
+            <label>技術程度<select id="quizSkill"><option value="beginner">新手</option><option value="intermediate">有一些經驗</option><option value="advanced">進階創作者</option></select></label>
+            <button type="submit" class="tv-primary">查看推薦結果</button>
+          </form><div id="quizResult" class="tv-result" aria-live="polite"></div>
+        </div>
+        <div class="tv-panel is-hidden" id="scenarioPanel"><h3>使用情境指南</h3><div class="tv-cards" id="scenarioCards"></div><h3 class="tv-subheading">工具選擇決策樹</h3><div class="tv-tree"><div>我的預算是多少？</div><span>↓</span><div>免費 → 依用途選擇 Nano Banana／Dreamina</div><span>↓</span><div>可付費 → 依用途選擇 Midjourney／Pika／Suno</div></div><p class="tv-muted">以上為入門方向，實際免費額度及功能依官方最新方案為準。</p></div>
+        <div class="tv-panel is-hidden" id="comparePanel"><h3>圖片生成工具橫向比較</h3><p class="tv-muted">以下為編輯比較草稿，速度、中文理解與適用情境為質性判斷，請依實際試用調整。</p><div class="tv-table-scroll"><table class="tv-table"><thead><tr><th>工具</th><th>生成速度</th><th>中文支援</th><th>免費額度</th><th>適合情境</th></tr></thead><tbody id="compareRows"></tbody></table></div><p class="tv-insight">選擇建議（待實測確認）：藝術視覺優先看 Midjourney；品牌圖形可先試 Recraft；入門嘗試可從 Nano Banana 開始；Adobe 工作流程可考慮 Firefly。這不是實測排名。</p></div>
+        <div class="tv-panel is-hidden" id="pricePanel"><h3>12 款工具價格方案比較</h3><p class="tv-muted">依原網站資料列出的「起始月費」，單位 US$，僅供展示；不代表相同使用量、計費週期或權益。</p><div class="tv-price-chart" id="priceChart"></div><h3 class="tv-subheading">簡易費用計算機</h3><form id="costForm" class="tv-form"><label>每月預計生成圖片（張）<input id="imageCount" type="number" min="0" value="30"></label><label>每月預計生成影片（支）<input id="videoCount" type="number" min="0" value="5"></label><button type="submit" class="tv-primary">查看方案參考</button></form><div class="tv-result" id="costResult" aria-live="polite"></div><p class="tv-muted">注意：原始資料沒有每張／每支的實際點數消耗，因此無法精確換算總成本。計算機只比較各類別入門月費，不會虛構單次生成價格。</p></div>
+        <div class="tv-panel is-hidden" id="promptPanel"><h3>Prompt 範例庫</h3><p class="tv-muted">可複製並修改的示範提示詞；使用效果會因模型而異。</p><div class="tv-cards" id="promptCards"></div></div>
+        <div class="tv-panel is-hidden" id="guidePanel"><h3>AI 工具新手指南</h3><div class="tv-cards"><article class="tv-mini-card"><h4>01｜什麼是 Prompt？</h4><p>Prompt 是你交給 AI 的指令。說清楚主題、風格、用途、格式，通常比只輸入幾個關鍵字更容易得到合適結果。</p></article><article class="tv-mini-card"><h4>02｜從免費方案開始</h4><p>先試做一個小作品，再確認下載格式、浮水印、生成額度和商用限制。免費不代表所有用途都免費。</p></article><article class="tv-mini-card"><h4>03｜修改與驗證</h4><p>把第一版視為草稿，逐次修改提示詞；檢查錯字、人物、聲音、版權及內容真實性。</p></article><article class="tv-mini-card"><h4>04｜著作權提醒</h4><p>使用生成內容前，查看工具服務條款與素材授權；避免未經許可模仿特定品牌、人物肖像或受保護作品。</p></article></div></div>
+        <div class="tv-panel is-hidden" id="trendPanel"><h3>AI 工具趨勢觀察</h3><div class="tv-cards"><article class="tv-mini-card"><h4>價格與點數制</h4><p>觀察方向：除了訂閱月費，也要比較每月點數、影片長度、解析度及生成失敗是否扣點。不同工具的「起價」不等於同樣成本。</p></article><article class="tv-mini-card"><h4>免費方案的變動</h4><p>免費額度與功能可能調整。建議記錄查詢日期，定期重新確認官方價格頁，而不是把目前額度當成永久條件。</p></article><article class="tv-mini-card"><h4>授權與商用差異</h4><p>不同方案可能對商用、浮水印、音樂發行及素材權利有不同規定。正式使用前請逐一閱讀官方條款。</p></article></div><h3 class="tv-subheading">商業授權查核表</h3><div class="tv-table-scroll"><table class="tv-table"><thead><tr><th>工具</th><th>官方網站</th><th>商用授權</th><th>浮水印／方案限制</th></tr></thead><tbody id="licenseRows"></tbody></table></div><p class="tv-muted">表格刻意不猜測法律條款：請在官方條款確認後填寫，並標註查核日期。</p></div>
+        <div class="tv-panel is-hidden" id="galleryPanel"><h3>作品展示牆</h3><p class="tv-muted">這裡預留你親自生成的作品位置。尚未上傳圖片時不會假裝有真實作品。</p><div class="tv-cards" id="galleryCards"></div><p class="tv-muted">使用方法：將圖片放進 images/ 資料夾，再到 enhanced.js 的 galleryItems 填入檔名、工具和 Prompt。</p></div>
+        <div class="tv-panel is-hidden" id="wishPanel"><h3>AI 工具許願池</h3><p class="tv-muted">想讓 ToolVerse 增加什麼工具或主題？</p><form id="wishForm" class="tv-form"><label>想看的工具或類別<input id="wishTitle" type="text" maxlength="80" required placeholder="例如：AI 簡報工具"></label><label>補充說明<textarea id="wishText" rows="4" maxlength="400" placeholder="你想用它完成什麼任務？"></textarea></label><button class="tv-primary" type="submit">送出建議</button></form><p id="wishThanks" class="tv-result" aria-live="polite"></p><p class="tv-muted">展示版：建議僅保存在這台瀏覽器的 localStorage，不會傳送到網站管理者。</p></div>
+      </section>
+
+      <!-- 關於區塊：導覽列「關於」連結的書籤目標（HTML 教材第 15 頁） -->
+      <div class="about-section" id="about">
+        <h2 class="about-title">關於 ToolVerse</h2>
+        <p class="about-text">
+          ToolVerse 是一個 AI 工具探索平台，幫助你依據類別快速瀏覽、比較各種 AI 工具。
+          無論是圖片生成、影片製作還是音樂創作，都能在這裡找到適合的工具，
+          並直接觀看教學影片與功能介紹。
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ================================
+         工具預覽頁面：左右兩欄以 Flexbox 排列（CSS 教材第 39–41 頁）
+         預設隱藏，點擊卡片後由 JavaScript 填入該工具的資料並顯示
+         ================================ -->
+    <div class="is-hidden" id="toolPreview">
+      <!-- 【超出範圍】<button>（原因同上） -->
+      <button class="back-btn" id="backBtn">← 返回工具列表</button>
+
+      <div class="preview-layout">
+
+        <!-- 左側：工具名稱 + 教學影片 -->
+        <div class="preview-left">
+          <h2 class="preview-heading">
+            <span class="preview-icon" id="previewIcon"></span>
+            <span id="previewTitle">工具名稱</span>
+          </h2>
+
+          <div class="iframe-container">
+            <!-- 以 <iframe> 嵌入 YouTube 影片：HTML 教材第 31–32 頁
+                 （frameborder="0" 移除邊框、allowfullscreen 允許全螢幕，都是教材的寫法）
+                 src 由 JavaScript 設為 https://www.youtube.com/embed/影片ID -->
+            <iframe class="preview-iframe" id="previewIframe" src="about:blank" frameborder="0" allowfullscreen></iframe>
+
+            <!-- iframe 替代方案：影片無法嵌入時顯示（該工具沒有教學影片，或網頁是直接以檔案開啟）
+                 提示文字與按鈕連結由 JavaScript 依情況填入 -->
+            <div class="iframe-fallback is-hidden" id="iframeFallback">
+              <p class="fallback-text" id="fallbackText">🚫 此工具目前沒有可在預覽視窗中顯示的教學內容</p>
+              <a class="fallback-link" href="#" id="fallbackLink" target="_blank">前往官方網站 →</a>
+            </div>
+          </div>
+
+          <p class="video-note" id="videoNote">
+            教學影片：<span id="videoTitle"></span>（<span id="videoAuthor"></span>）<br>
+            影片無法播放？<a class="video-link" href="#" id="videoLink" target="_blank">在 YouTube 開啟</a>
+          </p>
+        </div>
+
+        <!-- 右側：工具介紹與資訊 -->
+        <div class="preview-right">
+          <h3 class="preview-name" id="previewName">工具介紹</h3>
+          <p class="intro-text" id="previewDesc">工具介紹內容</p>
+
+          <!-- 工具資訊以表格呈現：HTML 教材第 23 頁 -->
+          <table class="info-table">
+            <tr>
+              <th class="info-label">評分</th>
+              <td class="info-value"><span class="stars" id="previewRating">★ 4.5 / 5.0</span></td>
+            </tr>
+            <tr>
+              <th class="info-label">評分來源</th>
+              <td class="info-value" id="previewSource">G2</td>
+            </tr>
+            <tr>
+              <th class="info-label">價格方案</th>
+              <td class="info-value" id="previewPriceTag">免費試用</td>
+            </tr>
+            <tr>
+              <th class="info-label">價格</th>
+              <td class="info-value" id="previewPrice">免費額度，付費 $10/月起</td>
+            </tr>
+            <tr>
+              <th class="info-label">類別</th>
+              <td class="info-value" id="previewCategory">圖片生成</td>
+            </tr>
+            <tr>
+              <th class="info-label info-last">適合對象</th>
+              <td class="info-value info-last" id="previewAudience">設計師、創作者</td>
+            </tr>
+          </table>
+
+          <div class="tv-preview-extra"><h4>ToolVerse 五面向評分</h4><div id="previewCustomScore"></div><p class="tv-muted">編輯示範評分（1–5 分）：易用性、生成品質、中文支援、性價比、免費額度；非實測或第三方評分。</p><h4>快速上手三步驟</h4><ol id="previewSteps"></ol><h4>編輯評論</h4><p id="previewEditorial"></p></div>
+          <!-- 官網與教學連結：target="_blank" 在新分頁開啟（HTML 教材第 14 頁） -->
+          <div class="preview-actions">
+            <a class="btn-primary" id="previewOfficialLink" href="#" target="_blank">前往官網</a>
+            <a class="btn-outline" id="previewHelpLink" href="#" target="_blank">使用教學 →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 ToolVerse. All rights reserved.
+  </div>
+
+  <!-- 「即將推出」提示：預設隱藏，點擊語音 / 圖片搜尋按鈕時由 JavaScript 顯示 2 秒 -->
+  <div class="toast is-hidden" id="toast">🚧 此功能即將推出！</div>
+
+  <!-- 【超出範圍】<script> 標籤與 JavaScript：課程僅教授 HTML 與 CSS。
+       <script src="..."> 用來載入外部 JavaScript 檔案，放在 </body> 前面，
+       等上面的 HTML 都建立好之後才執行。各檔案的用途寫在檔案開頭的註解。
+       tools-data.js（資料）必須放在 main.js（功能）前面 -->
+  <script src="tools-data.js"></script>
+  <script src="main.js"></script>
+  <script src="enhanced.js"></script>
+
+</body>
+</html>

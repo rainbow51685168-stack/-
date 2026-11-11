@@ -1,0 +1,884 @@
+/* ====================================================================
+   ToolVerse 樣式表（External Style Sheet，CSS 教材第 6 頁）
+
+   課程範圍內的寫法會標註對應的 CSS 教材頁碼。
+   超出課程範圍的寫法，會在該規則上方以【超出範圍】列出用到的項目，
+   各項目的說明統一整理如下：
+
+   【超出範圍】項目說明
+   1. CSS 變數（:root、--名稱、var()）
+      是什麼：把常用的值取名字存起來，之後用 var(--名稱) 取用。
+      為什麼：主題色、邊框色只要改一處，整個網站就會一起變。
+   2. 通用選擇器 * 與 box-sizing: border-box
+      是什麼：* 會選到所有元素；border-box 讓 width 包含 padding 與 border。
+      為什麼：清除瀏覽器預設的間距，並讓寬度好計算、不會超出容器。
+   3. border-radius
+      是什麼：把方框的四個角變成圓角。
+      為什麼：卡片、按鈕、標籤的圓角外觀。
+   4. linear-gradient 與 background-clip: text
+      是什麼：linear-gradient 產生漸層背景；background-clip: text 讓背景只顯示在文字上。
+      為什麼：設計規格要求「紫 → 藍」的漸層雙色調。
+   5. transition / transform
+      是什麼：transition 讓屬性變化有漸變動畫；transform 可平移、縮放元素。
+      為什麼：滑鼠移到卡片與按鈕上時的互動效果，以及提示訊息的水平置中。
+   6. cursor
+      是什麼：指定滑鼠游標的樣式。
+      為什麼：讓可點擊的元素顯示手指游標。
+   7. :focus-within、::placeholder、outline
+      是什麼：:focus-within 在內部元素取得焦點時生效；::placeholder 選到輸入框的提示文字；
+              outline 是瀏覽器在輸入框取得焦點時畫的外框。
+      為什麼：搜尋列取得焦點時整條變色，取代瀏覽器預設的外框。
+   8. :hover 用於非連結元素
+      是什麼：課程教的是 a:hover，這裡用在 <button> 與 <div>。
+      為什麼：卡片與按鈕也需要滑鼠移入的回饋。
+   9. align-items / justify-content，以及 gap 用於 Flexbox
+      是什麼：控制 flex items 在交叉軸、主軸上的對齊；gap 設定 items 之間的間距。
+              課程的 Flex Container 只教 display / flex-direction / flex-wrap，gap 只在 Grid 教。
+      為什麼：垂直置中、左右分散對齊，以及不必逐一設定 margin。
+   10. max-width / min-width
+      是什麼：限制元素的最大、最小寬度。
+      為什麼：大螢幕時內容不會無限拉寬；避免 flex item 被內容撐破。
+   11. overflow 與多行文字截斷（-webkit-line-clamp）
+      是什麼：overflow: hidden 把超出範圍的內容裁掉；line-clamp 限制文字最多顯示幾行。
+      為什麼：圓角容器要裁掉 iframe 的直角；卡片描述固定最多兩行，高度才會整齊。
+   12. repeat(auto-fill, minmax())
+      是什麼：讓 Grid 依容器寬度自動決定一列放幾欄，每欄有最小寬度。
+      為什麼：卡片牆在不同螢幕寬度下自動調整欄數。
+   ==================================================================== */
+
+
+/* ============================
+   基礎設定
+   ============================ */
+
+/* 【超出範圍】CSS 變數 */
+:root {
+  --primary-start: #A65AD7;
+  --primary-end: #F29BC4;
+  --bg: #FCF5FC;
+  --card-bg: #ffffff;
+  --text-dark: #39263F;
+  --text-secondary: #826D89;
+  --border-light: #EBD9EE;
+  --shadow: 0 2px 12px #F1DEEF;
+  --shadow-hover: 0 6px 24px #E8C8E9;
+  --radius: 12px;
+}
+
+/* 【超出範圍】通用選擇器 *、box-sizing（margin / padding 為 Box Model，CSS 教材第 31 頁） */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 【超出範圍】CSS 變數（背景、文字、字型屬性：CSS 教材第 9、13、15、17 頁） */
+body {
+  background-color: var(--bg);
+  color: var(--text-dark);
+  line-height: 160%;
+}
+
+/* Grouping Selectors（CSS 教材第 5 頁）：表單元件預設不會沿用 body 的字型，所以一起指定 */
+body, button, input, select {
+  font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+}
+
+
+/* ============================
+   導覽列（CSS 教材第 22–23 頁 Navigation Bar）
+   ============================ */
+
+/* 【超出範圍】CSS 變數（position: fixed、z-index：CSS 教材第 33 頁；box-shadow：第 34 頁） */
+.navbar {
+  background-color: var(--card-bg);
+  box-shadow: 0 1px 4px #F0DDEE;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+/* 【超出範圍】align-items、justify-content、max-width（Flexbox：CSS 教材第 39–40 頁） */
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+}
+
+/* 【超出範圍】linear-gradient、background-clip: text、cursor、CSS 變數 */
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+/* 【超出範圍】gap 用於 Flexbox（list-style-type: none：CSS 教材第 22 頁） */
+.nav-links {
+  display: flex;
+  gap: 24px;
+  list-style-type: none;
+}
+
+/* 【超出範圍】CSS 變數 */
+.nav-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* 【超出範圍】CSS 變數（a:hover：CSS 教材第 19 頁） */
+.nav-link:hover {
+  color: var(--primary-start);
+}
+
+
+/* ============================
+   主內容區域
+   ============================ */
+
+/* 【超出範圍】max-width（上方留白是為了避開 position: fixed 的導覽列） */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 90px 24px 40px 24px;
+}
+
+
+/* ============================
+   英雄區（Hero）
+   ============================ */
+.hero {
+  text-align: center;
+  padding: 40px 0 30px 0;
+}
+
+/* 【超出範圍】linear-gradient、background-clip: text、CSS 變數 */
+.hero-title {
+  font-size: 32px;
+  margin-bottom: 8px;
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 【超出範圍】CSS 變數 */
+.hero-text {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+
+/* ============================
+   搜尋區域
+   ============================ */
+
+/* 【超出範圍】max-width */
+.search-section {
+  max-width: 700px;
+  margin: 0 auto 12px auto;
+}
+
+/* 【超出範圍】align-items、border-radius、transition、CSS 變數 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg);
+  border: 2px solid var(--border-light);
+  border-radius: 50px;
+  padding: 6px 8px 6px 20px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.3s;
+}
+
+/* 【超出範圍】:focus-within、CSS 變數 */
+.search-bar:focus-within {
+  border-color: var(--primary-start);
+}
+
+/* 【超出範圍】CSS 變數 */
+.search-icon {
+  font-size: 18px;
+  color: var(--text-secondary);
+  padding: 8px 8px 8px 0;
+}
+
+/* 【超出範圍】outline、CSS 變數
+   width 設小、再用 flex-grow 撐滿剩餘空間（CSS 教材第 41 頁），窄螢幕時輸入框才縮得下去 */
+.search-input {
+  width: 50px;
+  flex-grow: 1;
+  border-style: none;
+  outline: none;
+  font-size: 15px;
+  background-color: transparent;
+  color: var(--text-dark);
+}
+
+/* 【超出範圍】::placeholder */
+.search-input::placeholder {
+  color: #AC94AE;
+}
+
+/* 【超出範圍】cursor、border-radius、transition、CSS 變數（Grouping：CSS 教材第 5 頁） */
+.voice-btn, .image-btn {
+  background-color: transparent;
+  border-style: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-secondary);
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+/* 【超出範圍】:hover 用於非連結元素 */
+.voice-btn:hover, .image-btn:hover {
+  background-color: #F9EAF6;
+}
+
+/* 【超出範圍】linear-gradient、border-radius、cursor、CSS 變數 */
+.search-btn {
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  color: white;
+  border-style: none;
+  border-radius: 50px;
+  padding: 10px 22px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、CSS 變數 */
+.search-btn:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.filter-toggle-row {
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* 【超出範圍】border-radius、cursor、transition、CSS 變數 */
+.filter-toggle-btn {
+  background-color: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、CSS 變數 */
+.filter-toggle-btn:hover {
+  border-color: var(--primary-start);
+  color: var(--primary-start);
+}
+
+
+/* ============================
+   進階篩選面板（<fieldset>：HTML 教材第 43 頁）
+   預設隱藏，由 JavaScript 加上 / 移除檔案最下方的 .is-hidden
+   ============================ */
+
+/* 【超出範圍】max-width */
+.advanced-filter {
+  max-width: 700px;
+  margin: 0 auto 20px auto;
+}
+
+/* 【超出範圍】border-radius、CSS 變數 */
+.filter-fieldset {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 14px 20px 20px 20px;
+  box-shadow: var(--shadow);
+}
+
+/* 【超出範圍】CSS 變數 */
+.filter-legend {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--primary-start);
+  padding: 0 8px;
+}
+
+.filter-group {
+  margin-bottom: 14px;
+}
+
+/* 【超出範圍】CSS 變數 */
+.filter-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* 【超出範圍】border-radius、CSS 變數 */
+.filter-select {
+  padding: 6px 12px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* 【超出範圍】gap 用於 Flexbox（flex-wrap：CSS 教材第 40 頁） */
+.filter-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.check-item {
+  font-size: 14px;
+}
+
+.rating-text {
+  font-size: 14px;
+}
+
+/* 【超出範圍】border-radius、cursor、CSS 變數（<input type="reset">：HTML 教材第 40 頁） */
+.filter-reset {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、CSS 變數 */
+.filter-reset:hover {
+  border-color: var(--primary-start);
+  color: var(--primary-start);
+}
+
+
+/* ============================
+   類別標籤列
+   ============================ */
+
+/* 【超出範圍】justify-content、gap 用於 Flexbox（flex-wrap：CSS 教材第 40 頁） */
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0 30px 0;
+}
+
+/* 【超出範圍】border-radius、cursor、transition、CSS 變數 */
+.category-tab {
+  padding: 8px 22px;
+  border: 2px solid var(--border-light);
+  border-radius: 50px;
+  background-color: var(--card-bg);
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、CSS 變數 */
+.category-tab:hover {
+  border-color: var(--primary-start);
+  color: var(--primary-start);
+}
+
+/* 【超出範圍】linear-gradient、CSS 變數
+   寫在 .category-tab 與 :hover 之後，同樣優先度時後面的規則會蓋過前面的（Cascade，CSS 教材第 8 頁） */
+.category-tab-active {
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  color: white;
+  border-color: transparent;
+}
+
+/* 【超出範圍】:hover 用於非連結元素（已選取的標籤滑鼠移入時維持原樣） */
+.category-tab-active:hover {
+  color: white;
+  border-color: transparent;
+}
+
+
+/* ============================
+   工具卡片牆（Grid：CSS 教材第 43–45 頁）
+   ============================ */
+
+/* 【超出範圍】repeat(auto-fill, minmax())（display: grid、grid-template-columns、fr、gap 為課程範圍） */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* 【超出範圍】border-radius、transition（含 transform 的漸變）、cursor、CSS 變數
+   卡片本身是直向的 flex container（flex-direction：CSS 教材第 40 頁），讓按鈕固定貼在卡片底部 */
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 24px 20px 18px 20px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、transform、CSS 變數 */
+.tool-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+/* 【超出範圍】align-items、gap 用於 Flexbox */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+/* 【超出範圍】align-items、justify-content、border-radius（flex-shrink：CSS 教材第 41 頁）
+   背景色由 JavaScript 以 inline style 填入（Inline Styles：CSS 教材第 7 頁） */
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.card-name {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.card-rating {
+  font-size: 13px;
+  color: #f59e0b;
+}
+
+/* 【超出範圍】多行文字截斷（-webkit-line-clamp）、overflow、CSS 變數
+   flex-grow: 1 讓描述吃掉卡片剩餘高度（CSS 教材第 41 頁） */
+.card-desc {
+  flex-grow: 1;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 【超出範圍】align-items、gap 用於 Flexbox */
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+/* 【超出範圍】border-radius（flex-shrink：CSS 教材第 41 頁） */
+.tag {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 50px;
+  flex-shrink: 0;
+}
+
+.tag-free {
+  background-color: #F7DDED;
+  color: #934D79;
+}
+
+.tag-freemium {
+  background-color: #F8E4F4;
+  color: #87538C;
+}
+
+.tag-paid {
+  background-color: #EDDDF9;
+  color: #7543A5;
+}
+
+/* flex-grow: 1 把後面的類別標籤推到最右邊（CSS 教材第 41 頁） */
+.card-price {
+  flex-grow: 1;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* 【超出範圍】CSS 變數 */
+.category-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* 【超出範圍】border-radius、cursor、transition、CSS 變數 */
+.view-btn {
+  width: 100%;
+  font-size: 13px;
+  color: var(--primary-start);
+  background-color: transparent;
+  border: 1px solid var(--primary-start);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、CSS 變數 */
+.view-btn:hover {
+  background-color: var(--primary-start);
+  color: white;
+}
+
+/* 【超出範圍】CSS 變數 */
+.rating-note {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* 【超出範圍】CSS 變數 */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+
+/* ============================
+   工具預覽頁面（Flexbox：CSS 教材第 39–41 頁）
+   ============================ */
+
+/* 【超出範圍】cursor、CSS 變數 */
+.back-btn {
+  background-color: transparent;
+  border-style: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 6px 0;
+}
+
+/* 【超出範圍】:hover 用於非連結元素、CSS 變數 */
+.back-btn:hover {
+  color: var(--primary-start);
+}
+
+/* 【超出範圍】align-items、gap 用於 Flexbox */
+.preview-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+/* 【超出範圍】min-width（flex-grow：CSS 教材第 41 頁） */
+.preview-left {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+/* 【超出範圍】align-items、gap 用於 Flexbox */
+.preview-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+/* 【超出範圍】align-items、justify-content、border-radius */
+.preview-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* 【超出範圍】border-radius、overflow、CSS 變數 */
+.iframe-container {
+  width: 100%;
+  height: 470px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background-color: #FFF8FC;
+}
+
+/* iframe 預設是 inline 元素，改成 block 才不會在底部多出空隙（display：CSS 教材第 32 頁）
+   這裡用 class 而不用 id 選擇器：id 的優先度比 class 高，會讓最下方的 .is-hidden 蓋不過去 */
+.preview-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 【超出範圍】align-items、justify-content、CSS 變數（沒有教學影片時顯示的替代內容） */
+.iframe-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.fallback-text {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+/* 【超出範圍】linear-gradient、border-radius、CSS 變數 */
+.fallback-link {
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  color: white;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* 【超出範圍】CSS 變數 */
+.video-note {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* 【超出範圍】CSS 變數 */
+.video-link {
+  color: var(--primary-start);
+}
+
+/* 【超出範圍】border-radius、CSS 變數（flex-shrink: 0 讓右欄維持固定寬度，CSS 教材第 41 頁） */
+.preview-right {
+  width: 320px;
+  flex-shrink: 0;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.preview-name {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+/* 【超出範圍】CSS 變數 */
+.intro-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+  line-height: 170%;
+}
+
+/* 工具資訊表格（CSS 教材第 25–27 頁 Tables Properties） */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+/* 【超出範圍】CSS 變數 */
+.info-label {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-weight: normal;
+  text-align: left;
+  vertical-align: top;
+  width: 80px;
+}
+
+/* 【超出範圍】CSS 變數 */
+.info-value {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-weight: bold;
+  text-align: right;
+}
+
+/* 最後一列不要底線：寫在 .info-label / .info-value 之後才蓋得過去（Cascade，CSS 教材第 8 頁） */
+.info-last {
+  border-bottom-style: none;
+}
+
+.stars {
+  color: #f59e0b;
+}
+
+.preview-actions {
+  margin-top: 20px;
+}
+
+/* 【超出範圍】linear-gradient、border-radius、CSS 變數
+   display: block 讓整個連結區域都可以點（CSS 教材第 22 頁） */
+.btn-primary {
+  display: block;
+  text-align: center;
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  color: white;
+  text-decoration: none;
+  padding: 11px 0;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* 【超出範圍】CSS 變數（a:hover：CSS 教材第 19 頁） */
+.btn-primary:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* 【超出範圍】border-radius、transition、CSS 變數 */
+.btn-outline {
+  display: block;
+  text-align: center;
+  border: 1px solid var(--primary-start);
+  color: var(--primary-start);
+  text-decoration: none;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* 【超出範圍】CSS 變數（a:hover：CSS 教材第 19 頁） */
+.btn-outline:hover {
+  background-color: var(--primary-start);
+  color: white;
+}
+
+
+/* ============================
+   「即將推出」提示
+   ============================ */
+
+/* 【超出範圍】transform、border-radius、CSS 變數（position: fixed、z-index：CSS 教材第 33 頁）
+   left: 50% 會讓左邊緣對齊畫面中線，再用 transform 往左移回自身寬度的一半，才是真正置中 */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-dark);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 200;
+}
+
+
+/* ============================
+   關於區塊
+   ============================ */
+
+/* 【超出範圍】max-width */
+.about-section {
+  max-width: 700px;
+  margin: 50px auto 0 auto;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* 【超出範圍】linear-gradient、background-clip: text、CSS 變數 */
+.about-title {
+  font-size: 22px;
+  margin-bottom: 12px;
+  background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 【超出範圍】CSS 變數 */
+.about-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 180%;
+}
+
+
+/* ============================
+   Footer
+   ============================ */
+
+/* 【超出範圍】CSS 變數 */
+.footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 50px;
+}
+
+
+/* 手機版：580px 以下 */
+.navbar-inner { padding: 10px 14px; }
+.logo { font-size: 18px; }
+.nav-links { gap: 14px; }
+.nav-link { font-size: 14px; }
+.main-content { padding: 70px 14px 30px 14px; }
+.hero { padding: 24px 0 20px 0; }
+.hero-title { font-size: 24px; }
+.hero-text { font-size: 14px; }
+.search-bar { padding: 4px 6px 4px 12px; }
+.voice-btn, .image-btn { padding: 6px; }
+.search-btn { padding: 8px 14px; }
+.category-tab { padding: 6px 16px; font-size: 13px; }
+.tools-grid { grid-template-columns: 1fr; }
+.preview-layout { flex-direction: column; align-items: stretch; }
+.preview-right { width: 100%; padding: 18px; }
+.iframe-container { height: 230px; }
+.about-section { margin-top: 30px; padding: 30px 10px; }
+.search-input { min-width: 0; }
+
+/* ============================
+   顯示 / 隱藏切換
+   由 JavaScript 加上或移除這個 class。
+   一定要放在檔案最後面：其他 class 也設定了 display（flex / grid / block），
+   同樣優先度時後面的規則會蓋過前面的（Cascade，CSS 教材第 8 頁）。
+   ============================ */
+
+/* ToolVerse 探索實驗室：沿用既有主題變數，不覆蓋原始卡片排版 */
+.tv-explore{margin:55px 0 35px;scroll-margin-top:90px}.tv-section-head{text-align:center;margin-bottom:22px}.tv-section-head .about-title{margin-bottom:6px}.tv-feature-tabs{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:18px}.tv-tab,.tv-secondary,.tv-vote{border:1px solid var(--border-light);background:var(--card-bg);color:var(--text-secondary);border-radius:22px;padding:9px 14px;cursor:pointer;font-size:13px}.tv-tab:hover,.tv-secondary:hover,.tv-vote:hover{border-color:var(--primary-start);color:var(--primary-start)}.tv-tab.tv-active,.tv-primary{background:linear-gradient(135deg,var(--primary-start),var(--primary-end));color:white;border:0}.tv-panel{background:var(--card-bg);border:1px solid var(--border-light);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}.tv-panel h3{font-size:19px;margin-bottom:10px}.tv-panel h4{font-size:15px;margin:8px 0}.tv-muted{color:var(--text-secondary);font-size:13px;margin:8px 0 18px}.tv-form{display:flex;flex-wrap:wrap;align-items:end;gap:14px;margin:18px 0}.tv-form label{display:flex;flex-direction:column;gap:6px;flex:1 1 190px;font-size:13px;font-weight:bold}.tv-form select,.tv-form input,.tv-form textarea{width:100%;border:1px solid var(--border-light);border-radius:8px;background:white;padding:10px;font-size:14px;color:var(--text-dark)}.tv-primary{padding:11px 20px;border-radius:8px;cursor:pointer;font-size:14px}.tv-result:not(:empty){background:var(--bg);border-radius:10px;padding:16px;margin-top:15px}.tv-result p{margin:7px 0}.tv-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}.tv-mini-card{border:1px solid var(--border-light);border-radius:12px;padding:18px;background:var(--card-bg)}.tv-mini-card p{font-size:13px;line-height:1.75;color:var(--text-secondary)}.tv-mini-card strong{color:var(--primary-start)}.tv-table-scroll{overflow-x:auto;margin:16px 0}.tv-table{width:100%;border-collapse:collapse;font-size:13px;min-width:580px}.tv-table th,.tv-table td{padding:12px;border-bottom:1px solid var(--border-light);text-align:left}.tv-table th{background:var(--bg)}.tv-table a{color:var(--primary-start)}.tv-insight{background:var(--bg);padding:15px;border-radius:10px;font-size:13px}.tv-subheading{margin-top:25px}.tv-tree{text-align:center;max-width:520px;margin:15px auto}.tv-tree div{border:1px solid var(--border-light);border-radius:10px;background:var(--bg);padding:12px}.tv-tree span{display:block;color:var(--primary-start)}.tv-price-row{display:grid;grid-template-columns:140px 1fr 70px;align-items:center;gap:12px;margin:10px 0;font-size:13px}.tv-price-track{height:13px;background:var(--bg);border-radius:12px;overflow:hidden}.tv-price-fill{height:100%;background:linear-gradient(90deg,var(--primary-start),var(--primary-end));border-radius:12px}.tv-prompt{word-break:break-word;margin:12px 0}.tv-gallery-image{width:100%;border-radius:10px}.tv-card-note{font-size:12px;color:var(--text-secondary);line-height:1.55;margin:9px 0}.tv-card-score{font-size:12px;font-weight:bold;color:var(--primary-start);margin-top:10px}.tv-vote{width:100%;margin-top:6px}.tv-preview-extra{border-top:1px solid var(--border-light);margin-top:22px;padding-top:14px}.tv-preview-extra h4{font-size:14px;margin:15px 0 9px}.tv-preview-extra ol{padding-left:21px;font-size:13px;line-height:1.9}.tv-preview-extra p{font-size:13px;color:var(--text-secondary)}.tv-score{font-size:22px!important;color:var(--primary-start)!important;font-weight:bold}.tv-score small{font-size:11px;font-weight:normal}.tv-score-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border-light)}.tv-panel.is-hidden{display:none}
+@media screen and (max-width:580px){.tv-explore{margin-top:35px}.tv-panel{padding:17px}.tv-tab{padding:7px 10px;font-size:12px}.tv-price-row{grid-template-columns:90px 1fr 58px;gap:7px;font-size:11px}.tv-cards{grid-template-columns:1fr}.tv-form{flex-direction:column;align-items:stretch}.tv-form label{flex-basis:auto}.tv-feature-tabs{justify-content:flex-start}}
+
+.is-hidden {
+  display: none;
+}
